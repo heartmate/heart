@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">HeartMate</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="aid1">Call 911</string>
+    <string name="aid2">Give the patient an aspirin to chew and swallow</string>
+    <string name="aid3">CPR if the patient is unconscious</string>
+    <string name="aid4">Do chest compressions (about 100 to 120 compressions a minute)</string>
+    <string name="aid5">Call cardiologist for instruction</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello, Can I Help you...</string>
+</resources>

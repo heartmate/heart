@@ -1,0 +1,67 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr"
+    tools:context="com.HeartmatePack.heartmate.HomeFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimary"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/pr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_account_circle_home" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/pr"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/pr" />
+
+    </RelativeLayout>
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/heart_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="42dp"
+            android:layout_marginTop="150dp"
+            android:textStyle="bold"
+            android:text="-- pmd" />
+        <Button
+            android:id="@+id/doctor_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_below="@+id/heart_rate"
+            android:layout_centerInParent="true"
+            android:text=" Contact Doctor"
+            android:textSize="24dp"
+            android:drawableLeft="@drawable/ic_action_message"
+
+            android:textColor="#ffffff"
+            android:background="@color/colorPrimary"
+            />
+
+    </RelativeLayout>
+
+
+</FrameLayout>

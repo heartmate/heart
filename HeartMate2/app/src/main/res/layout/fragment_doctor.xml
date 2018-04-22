@@ -1,0 +1,143 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr"
+    tools:context="com.HeartmatePack.heartmate.DoctorFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="28dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="24dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    >
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingTop="@dimen/nav_header_vertical_spacing"
+                        android:src="@drawable/ic_account_circle" />
+
+                    <TextView
+                        android:id="@+id/doc_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/imageView"
+                        android:layout_toRightOf="@+id/imageView"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="20dp"
+                        android:text="Ali"
+                        android:textColor="#000000"
+                        android:textSize="28dp" />
+                </RelativeLayout>
+
+            </TableRow>
+
+            <!-- Doctor phone number label -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:text="Phone Number"
+                    android:textColor="@color/colorTextGray"
+                    android:textSize="24sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/doc_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+
+                    android:paddingLeft="16dp"
+                    android:text="XXX XXXX XXX"
+                    android:textColor="#000000"
+
+                    android:textSize="28dp" />
+            </TableRow>
+
+
+            <!-- Doctor hospital name label -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:text="Hospital Name"
+                    android:textColor="@color/colorTextGray"
+                    android:textSize="24sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/doc_hos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:text="Erfan"
+                    android:textColor="#000000"
+                    android:textSize="28dp" />
+            </TableRow>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/delet_my_doctor_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp"
+                android:background="@color/colorRemoveButton"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="Remove Doctor"
+                android:textColor="@color/colorTextRemoveButton" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</FrameLayout>

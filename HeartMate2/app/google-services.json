@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "624676528194",
+    "firebase_url": "https://heartmatep-576a0.firebaseio.com",
+    "project_id": "heartmatep-576a0",
+    "storage_bucket": "heartmatep-576a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624676528194:android:217f91ed03783a5f",
+        "android_client_info": {
+          "package_name": "com.HeartmatePack.heartmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624676528194-276s7qp5veehesokc30dut6gqs4g9mnr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVHJJwjv6QbHWivI2H-dq5-Z6j5oMeSzU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

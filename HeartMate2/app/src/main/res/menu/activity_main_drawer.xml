@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layoutDirection="ltr"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_my_page"
+            android:icon="@drawable/ic_account_circle"
+            android:title="My page" />
+        <item
+            android:id="@+id/nav_my_doc"
+            android:icon="@drawable/ic_library_books"
+            android:title="My doctor" />
+        <item
+            android:id="@+id/nav_em"
+            android:icon="@drawable/ic_group"
+            android:title="Emergency contacts" />
+        <item
+            android:id="@+id/nav_list_pa"
+            android:icon="@drawable/ic_account_circle"
+            android:title="List of patients" />
+        <item
+            android:id="@+id/nav_edit"
+            android:icon="@drawable/ic_account_circle"
+            android:title="Edit profile" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help_outline"
+            android:title="Help" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_power_settings_new"
+            android:title="Logout" />
+    </group>
+
+
+
+</menu>

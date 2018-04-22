@@ -1,0 +1,197 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr"
+    tools:context="com.HeartmatePack.heartmate.ProfileFragment">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:layout_marginBottom="24dp"
+            android:paddingTop="60dp">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="97dp"
+                android:layout_height="105dp"
+                android:src="@drawable/ic_account_circle"
+                tools:layout_editor_absoluteX="271dp"
+                tools:layout_editor_absoluteY="6dp" />
+            <!--  Name Label -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/input_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    />
+
+            </TableRow>
+            <!-- Date of Birth Label -->
+
+            <!-- Phone number Label -->
+
+
+            <!-- Wristband serial number Label -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/input_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="phone number"
+                    />
+            </TableRow>
+
+
+            <!-- Password Label -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/input_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="email"
+
+                    />
+            </TableRow>
+            <TableRow
+                android:id="@+id/age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/input_Age"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Age"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/input_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Gender"
+                    />
+            </TableRow>
+            <TableRow
+                android:id="@+id/kg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/input_wight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="wight"
+                    android:text="Kg"
+                    />
+            </TableRow>
+
+
+            <LinearLayout
+                android:id="@+id/heart_rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="12dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Heart Rate:"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="2"
+                    android:layout_marginTop="2dp"
+                    >
+                    <TextView
+                        android:id="@+id/minrate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Min. Rate"
+                        android:inputType="number"
+                        />
+                    <TextView
+                        android:id="@+id/maxrate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Max. Rate"
+                        android:inputType="number"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        <LinearLayout
+            android:id="@+id/aids"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="first aid Selection:"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/aidsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                />
+        </LinearLayout>
+
+            <!-- Signup Button -->
+            <Button
+                android:id="@+id/btn_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+                android:text="Edit Profile"
+                android:background="@color/colorButtons"
+                android:textColor="@color/colorTextButton"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</FrameLayout>

@@ -16,11 +16,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // get views from activity
         patient_login=(LinearLayout)findViewById(R.id.patient_login);
         doctor_login=(LinearLayout)findViewById(R.id.doctor_login);
 
 
-        // if patient
+        // if patient set type = 0
         patient_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -29,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        // if doctor
+        // if doctor set type = 1
         doctor_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

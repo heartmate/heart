@@ -41,16 +41,25 @@ public class Login_Activity extends AppCompatActivity {
         getSupportActionBar().hide();
         mAuth = FirebaseAuth.getInstance();
 
+
         emailField = (EditText) findViewById(R.id.input_p_email);
         passwordField = (EditText) findViewById(R.id.input_p_password);
+
         final Button loginButton = (Button) findViewById(R.id.btn_p_login);
+
+        // show progress dialog
         progressDialog = new ProgressDialog(this);
 
+        // login button listener
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // get email and password
                 p_email = emailField.getText().toString();
                 p_password = passwordField.getText().toString();
+
+                // check email and password are filled
                 if (p_email.trim().equals("") || p_password.trim().equals(""))
                     Toast.makeText(getApplicationContext(), "Please enter all fields....", Toast.LENGTH_SHORT).show();
                 else {
@@ -74,6 +83,9 @@ public class Login_Activity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        // method to go to forget password link
         TextView forgetPasswordLink = (TextView) findViewById(R.id.link_forgetPassword);
         forgetPasswordLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +95,7 @@ public class Login_Activity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     @Override
@@ -92,32 +105,33 @@ public class Login_Activity extends AppCompatActivity {
 
     private void login(String email, String password) {
 
-        progressDialog.setMessage("Login...");
-        progressDialog.show();
+        // show progress
+        Util.showprogress(Login_Activity.this, "Login...");
+
+        // get user from database
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // Sign in success and update user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             final String uid = user.getUid();
 
                             // Patient
                             if (Constant.type == 0) {
+                                // set reference on patient in firebase
                                 tasksRef = initDatabase().getReference(Constant.PATIENT_FIREBASE);
                                 tasksRef.addChildEventListener(new ChildEventListener() {
-
-
-
                                     @Override
                                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                        Log.e("Log", "onChildAdded: " + dataSnapshot.getValue());
+                                        Log.e("Log in", "onChildAdded: " + dataSnapshot.getValue());
                                         Patient patient = (Patient) dataSnapshot.getValue(Patient.class);
 
                                         if (patient != null && "0".equals(patient.getType()) && patient.getPatient_id().equals(uid)) {
                                             Constant.patient = patient;
 
-                                            progressDialog.dismiss();
+                                            Util.dismissprogress();
                                             Toast.makeText(getApplicationContext(), "welcome  " + Constant.patient.getFirst_name() + " " + Constant.patient.getLast_name(), Toast.LENGTH_SHORT).show();
 
                                             String[] emg = new String[3];
@@ -134,11 +148,12 @@ public class Login_Activity extends AppCompatActivity {
                                                 emg[i] = Constant.patient.getContact3();
                                                 i++;
                                             }
+
                                             startActivity(new Intent(Login_Activity.this, MainActivity.class));
                                             finish();
                                         } else {
                                             mAuth.signOut();
-                                            progressDialog.dismiss();
+                                            Util.dismissprogress();
                                         }
 
                                     }
@@ -163,24 +178,32 @@ public class Login_Activity extends AppCompatActivity {
 
                                     }
                                 });
+
+                                if (Constant.patient.getDoctor() != null && !Constant.patient.getDoctor().isEmpty()) {
+                                    getDoctor();
+                                }
 
                             }
                             // Doctor
                             else {
+                                // set reference on doctor in firebase
                                 tasksRef = initDatabase().getReference(Constant.DOCTOR_FIREBASE);
                                 tasksRef.addChildEventListener(new ChildEventListener() {
                                     @Override
                                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                        Log.e("Log", "onChildAdded: " + dataSnapshot.getValue());
+                                        Log.e("Login", "onChildAdded: " + dataSnapshot.getValue());
                                         Doctor doctor = (Doctor) dataSnapshot.getValue(Doctor.class);
                                         if (doctor != null && "1".equals(doctor.getType()) && doctor.getDoctor_id().equals(uid)) {
                                             Constant.Doctor = doctor;
-                                            progressDialog.dismiss();
+                                            Util.dismissprogress();
+
+                                            // go to home page (Main Activity)
                                             Toast.makeText(getApplicationContext(), "welcome  " + Constant.Doctor.getFirst_name() + " " + Constant.Doctor.getLast_name(), Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(Login_Activity.this, MainActivity.class));
                                             finish();
+
                                         } else {
-                                            progressDialog.dismiss();
+                                            Util.dismissprogress();
                                             mAuth.signOut();
                                         }
                                     }
@@ -205,16 +228,54 @@ public class Login_Activity extends AppCompatActivity {
 
                                     }
                                 });
-                                progressDialog.dismiss();
+                                Util.dismissprogress();
                             }
-                            progressDialog.dismiss();
+                            Util.dismissprogress();
 
                         } else {
-                            progressDialog.dismiss();
-                            Toast.makeText(Login_Activity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Util.dismissprogress();
+                            // display a Message if sign in fails
+                            Toast.makeText(Login_Activity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+
+    private void getDoctor() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference tasksRef = database.getReference(Constant.DOCTOR_FIREBASE);
+
+        tasksRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Doctor dcotor = (Doctor) dataSnapshot.getValue(Doctor.class);
+                if (dcotor != null && dcotor.getDoctor_id().equals(Constant.patient.getDoctor())) {
+                    Constant.patient_doctor = dcotor ;
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private FirebaseDatabase initDatabase() {

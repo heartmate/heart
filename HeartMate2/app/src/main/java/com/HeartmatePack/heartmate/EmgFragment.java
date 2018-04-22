@@ -7,6 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 /**
@@ -22,7 +28,10 @@ public class EmgFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    EditText ec1, ec2, ec3;
 
+    private DatabaseReference tasksRef;
+    Button save_contact;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -65,6 +74,43 @@ public class EmgFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_emg, container, false);
+
+        // get views from fragment
+        ec1 = view.findViewById(R.id.ec1);
+        ec2 = view.findViewById(R.id.ec2);
+        ec3 = view.findViewById(R.id.ec3);
+
+        ec1.setText(Constant.patient.getContact1());
+        ec2.setText(Constant.patient.getContact2());
+        ec3.setText(Constant.patient.getContact3());
+
+        // save button
+        save_contact = view.findViewById(R.id.save_contact);
+        initDatabase();
+        save_contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // get data from activity
+                Constant.patient.setContact1(ec1.getText() + "");
+                Constant.patient.setContact2(ec2.getText() + "");
+                Constant.patient.setContact3(ec3.getText() + "");
+
+                ec1.setEnabled(false);
+                ec2.setEnabled(false);
+                ec3.setEnabled(false);
+
+                // send data to firebase
+                tasksRef.child(Constant.patient.getPatient_id()).child("contact1").setValue(Constant.patient.getContact1());
+                tasksRef.child(Constant.patient.getPatient_id()).child("contact2").setValue(Constant.patient.getContact2());
+                tasksRef.child(Constant.patient.getPatient_id()).child("contact3").setValue(Constant.patient.getContact3());
+
+                // completion message
+                Toast.makeText(getActivity(),"Emergency contacts saved ...", Toast.LENGTH_SHORT).show();
+
+                getFragmentManager().popBackStack();
+            }
+        });
         return view;
     }
 
@@ -100,5 +146,10 @@ public class EmgFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void initDatabase() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        tasksRef = database.getReference(Constant.PATIENT_FIREBASE);
     }
 }

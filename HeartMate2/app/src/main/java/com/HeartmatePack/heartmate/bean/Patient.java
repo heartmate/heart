@@ -187,4 +187,30 @@ public class Patient {
         this.aids = aids;
     }
 
+    @Exclude
+    public Map<String, Object> toMap() {
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("patient_id", patient_id);
+        result.put("first_name", first_name);
+        result.put("last_name", last_name);
+        result.put("phone", phone);
+        result.put("age", age);
+        result.put("gender", gender);
+        result.put("email", email);
+        result.put("type", type);
+        result.put("weight", weight);
+        result.put("wrist", wrist);
+        result.put("firstAid", firstAid);
+        result.put("contact1", contact1);
+        result.put("contact2", contact2);
+        result.put("contact3", contact3);
+        result.put("doctor", doctor);
+        result.put("doctor_ver", doctor_ver);
+        result.put("min", min);
+        result.put("max", max);
+        result.put("aids", aids);
+
+        return result;
+    }
 }

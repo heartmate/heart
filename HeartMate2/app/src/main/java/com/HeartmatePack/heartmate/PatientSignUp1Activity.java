@@ -58,7 +58,7 @@ public class PatientSignUp1Activity extends AppCompatActivity {
                 p_confirmPassword = confirmPasswordEditText.getText()+"";
                 p_wrist=input_p_wirst.getText()+"";
 
-                // check empty field
+                // check if there is empty field
                 if(f_p_name.isEmpty()||l_p_name.isEmpty()||p_email.isEmpty()||p_phone.isEmpty()||p_password.isEmpty()||p_confirmPassword.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter all fields....", Toast.LENGTH_SHORT).show();
                 }
@@ -73,7 +73,7 @@ public class PatientSignUp1Activity extends AppCompatActivity {
                         intent.putExtra(LoginActivity.TYPE,LoginActivity.PATIENT);
                         startActivity(intent);
                     }
-                    // if password not matched
+                    // if password not matched display message
                     else {
                         Toast.makeText(getApplicationContext(), "Password not matched ", Toast.LENGTH_SHORT).show();
                     }

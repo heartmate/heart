@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,15 +68,28 @@ public class NoDoctorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragmen
+        // Inflate the layout for this fragment
+
+        // get views from fragment
         View view = inflater.inflate(R.layout.fragment_no_doctor, container, false);
         btn_search_doctor = view.findViewById(R.id.btn_search_doctor);
+        frameLayout= view.findViewById(R.id.content);
 
         // search for doctor button
         btn_search_doctor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                // initiate Doctor list fragment
+                DoctorListFragment fragment2 = new DoctorListFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                frameLayout.removeAllViews();
+                fragmentTransaction.replace(R.id.content, fragment2);
+
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
         return view;
@@ -90,6 +105,7 @@ public class NoDoctorFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.e("NoDoctor", "onAttach" );
     }
 
     @Override

@@ -4,11 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
+import com.HeartmatePack.heartmate.bean.Doctor;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 /**
@@ -28,6 +39,9 @@ public class DoctorFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    TextView doc_name, doc_phone, doc_hos;
+    Button delet_my_doctor_btn;
+    FrameLayout con;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,7 +80,43 @@ public class DoctorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        // get views from fragment
         View view = inflater.inflate(R.layout.fragment_doctor, container, false);
+        doc_name = view.findViewById(R.id.doc_name);
+        doc_phone = view.findViewById(R.id.doc_phone);
+        doc_hos = view.findViewById(R.id.doc_hos);
+        delet_my_doctor_btn = view.findViewById(R.id.delet_my_doctor_btn);
+
+        // set data in views
+        doc_name.setText(Constant.patient_doctor.getFirst_name()+" "+Constant.patient_doctor.getLast_name());
+        doc_phone.setText(Constant.patient_doctor.getPhone());
+        doc_hos.setText(Constant.patient_doctor.getHospital());
+        con=view.findViewById(R.id.con);
+
+        // when click delete doctor button
+        delet_my_doctor_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initDatabasep();
+
+                // remove doctor from patient
+                Constant.patient.setDoctor("");
+
+                // remove doctor from patient in firebase
+                tasksRef.child(Constant.patient.getPatient_id()).child("doctor").removeValue();
+
+                // set no doctor fragment
+                NoDoctorFragment fragment2 = new NoDoctorFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                con.removeAllViews();
+                fragmentTransaction.replace(R.id.con, fragment2);
+
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         return view;
     }
 
@@ -80,6 +130,9 @@ public class DoctorFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if(Constant.patient.getDoctor()!=null && !Constant.patient.getDoctor().isEmpty()){
+            getDoctor();
+        }
     }
 
     @Override
@@ -101,5 +154,52 @@ public class DoctorFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    private void getDoctor() {
+
+        // set reference on doctor in firebase
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference tasksRef = database.getReference(Constant.DOCTOR_FIREBASE);
+
+        tasksRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.e("Util", "onChildAdded: " + dataSnapshot.getValue());
+
+                // get doctor information from firebase and save locally
+                Doctor doctor = (Doctor) dataSnapshot.getValue(Doctor.class);
+                if (doctor != null && doctor.getDoctor_id().equals(Constant.patient.getDoctor())) {
+                    Constant.patient_doctor = doctor;
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void initDatabasep() {
+        // set reference on patient in firebase
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        tasksRef = database.getReference(Constant.PATIENT_FIREBASE);
     }
 }

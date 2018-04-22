@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 /**
@@ -64,7 +66,21 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        // get views from activity
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        TextView txtName = (TextView) view.findViewById(R.id.name);
+        Button doctor_chat = view.findViewById(R.id.doctor_chat);
+
+        // chat with doctor button
+        doctor_chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+             // TODO: contact button
+            }
+        });
+
+        txtName.setText(Util.getname());
         return view;
     }
 

@@ -1,6 +1,5 @@
 package com.HeartmatePack.heartmate;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +28,7 @@ public class DoctorSignUpActivity extends AppCompatActivity {
     String p_specialty;
     String p_password;
     String p_confirmPassword;
+
     EditText f_nameEditText;
     EditText l_nameEditText;
     EditText emailEditText;
@@ -38,7 +38,7 @@ public class DoctorSignUpActivity extends AppCompatActivity {
     EditText passwordEditText;
     EditText confirmPasswordEditText;
 
-    ProgressDialog progressDialog;
+
     private FirebaseAuth auth;
 
     private DatabaseReference tasksRef;
@@ -49,6 +49,7 @@ public class DoctorSignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_doctor_sign_up);
         auth = FirebaseAuth.getInstance();
 
+        // get views from layout
         f_nameEditText = (EditText) findViewById(R.id.input_p_f_name);
         l_nameEditText = (EditText) findViewById(R.id.input_p_l_name);
         emailEditText = (EditText) findViewById(R.id.input_p_email);
@@ -56,15 +57,14 @@ public class DoctorSignUpActivity extends AppCompatActivity {
         spEditText = (EditText) findViewById(R.id.input_p_specialty);
         hospitalEditText = (EditText) findViewById(R.id.input_p_hospital);
         passwordEditText = (EditText) findViewById(R.id.input_p_password);
+
         //confirm password
         confirmPasswordEditText = (EditText) findViewById(R.id.input_p_password_confirm);
 
 
-
-        progressDialog = new ProgressDialog(this);
         Button signupButton = (Button) findViewById(R.id.btn_signup);
 
-        // sign up
+        // sign up button
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,18 +77,20 @@ public class DoctorSignUpActivity extends AppCompatActivity {
                 p_password = passwordEditText.getText() + "";
                 p_confirmPassword = confirmPasswordEditText.getText() + "";
 
-
-
+                // check no field is empty
                 if (!(f_p_name.isEmpty() || l_p_name.isEmpty() || p_email.isEmpty() || p_specialty.isEmpty() || p_password.isEmpty() || p_confirmPassword.isEmpty())) {
+
                     if (p_password.equals(p_confirmPassword)) {
 
-                        progressDialog.setMessage("SignUp...");
-                        progressDialog.show();
+                        // show waiting panel
+                        Util.showprogress(DoctorSignUpActivity.this, "SignUp...");
 
                         auth.createUserWithEmailAndPassword(p_email, p_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+                                    // Sign in success update the user's information
+                                    Log.e("D. Sing up", "createUserWithEmail:success");
                                     FirebaseUser user = auth.getCurrentUser();
 
                                     Constant.Doctor.setDoctor_id(user.getUid());
@@ -102,15 +104,17 @@ public class DoctorSignUpActivity extends AppCompatActivity {
                                     Constant.type = 1;
 
                                     initDatabase();
+
+                                    // send data to firebase
                                     tasksRef.child(Constant.Doctor.getDoctor_id()).setValue(Constant.Doctor).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            progressDialog.dismiss();
+                                            Util.dismissprogress();
                                             Toast.makeText(DoctorSignUpActivity.this, "Saved: ", Toast.LENGTH_SHORT).show();
                                         }
                                     });
 
-                                    progressDialog.dismiss();
+                                    Util.dismissprogress();
                                     Toast.makeText(DoctorSignUpActivity.this, " SignUp Success.",
                                             Toast.LENGTH_SHORT).show();
 
@@ -120,17 +124,19 @@ public class DoctorSignUpActivity extends AppCompatActivity {
                                     Constant.type = 1;
                                     startActivity(intent);
                                 } else {
-                                    // if sign in fails
-                                    progressDialog.dismiss();
+                                    // display a message if sign in fails
+                                    Util.dismissprogress();
                                     Log.w("D. Sign up", "createUserWithEmail:failure", task.getException());
                                     Toast.makeText(DoctorSignUpActivity.this, " failed.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
+                        // if password not mtached
                     } else {
                         Toast.makeText(getApplicationContext(), "Password not matched ", Toast.LENGTH_SHORT).show();
                     }
+                    // if one field is empty
                 } else {
                     Toast.makeText(getApplicationContext(), "Please enter all fields....", Toast.LENGTH_SHORT).show();
                 }
@@ -139,6 +145,7 @@ public class DoctorSignUpActivity extends AppCompatActivity {
     }
 
     private void initDatabase() {
+        // set reference on doctor in firebase
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         tasksRef = database.getReference(Constant.DOCTOR_FIREBASE);
     }

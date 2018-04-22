@@ -1,9 +1,13 @@
 package com.HeartmatePack.heartmate;
 
+import android.content.ContentValues;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,7 +20,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.HeartmatePack.heartmate.bean.Doctor;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -67,11 +77,16 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().getItem(1).setVisible(false);
             navigationView.getMenu().getItem(2).setVisible(false);
         }
-        txtName.setText(getname());
+        txtName.setText(Util.getname());
 
         // go directly to Home Page
         navItemIndex = 0;
         CURRENT_TAG = TAG_HOME;
+
+        loadHomeFragment(drawer);
+        if (Constant.patient.getDoctor() != null && !Constant.patient.getDoctor().isEmpty()) {
+            getDoctor();
+        }
     }
 
     @Override
@@ -98,7 +113,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        // My page
+        // My page ( Home Fragment od List of patients) = 0
         if (id == R.id.nav_my_page || id == R.id.nav_list_pa) {
             navItemIndex = 0;
             CURRENT_TAG = TAG_HOME;
@@ -127,6 +142,24 @@ public class MainActivity extends AppCompatActivity
         // log out = 5
         else if (id == R.id.nav_logout) {
 
+            // confirmation message
+            new AlertDialog.Builder(this)
+                    .setTitle("Log out:")
+                    .setMessage("Are you sure?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Log.e(ContentValues.TAG, "onClick: true ");
+                            mAuth = FirebaseAuth.getInstance();
+                            mAuth.signOut();
+                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+
+                            startActivity(intent);
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -163,6 +196,47 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    private void getDoctor() {
+
+        // set reference on doctor in firebase
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference tasksRef = database.getReference(Constant.DOCTOR_FIREBASE);
+
+        tasksRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.e("Util", "onChildAdded: " + dataSnapshot.getValue());
+
+                // get doctor information from firebase and save locally
+                Doctor doctor = (Doctor) dataSnapshot.getValue(Doctor.class);
+                if (doctor != null && doctor.getDoctor_id().equals(Constant.patient.getDoctor())) {
+                    Constant.patient_doctor = doctor;
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
@@ -171,13 +245,22 @@ public class MainActivity extends AppCompatActivity
                     HomeFragment homeFragment = new HomeFragment();
                     Log.e(TAG, "Patient: selected 0");
                     return homeFragment;
+                } else {
+                    PatientListFragment patientListFragment = new PatientListFragment();
+                    Log.e(TAG, "doctor: selected 0");
+                    return patientListFragment;
                 }
             case 1:
                 // My doctor fragment
-                DoctorFragment doctorfragment = new DoctorFragment();
-                Log.e(TAG, "patient: selected 1");
-                return doctorfragment;
-
+                if (Constant.type == 0 && Constant.patient.getDoctor() != null && !Constant.patient.getDoctor().isEmpty()) {
+                    DoctorFragment doctorfragment = new DoctorFragment();
+                    Log.e(TAG, "patient: selected 1");
+                    return doctorfragment;
+                } else {
+                    NoDoctorFragment noDoctorFragment = new NoDoctorFragment();
+                    Log.e(TAG, "patient: selected 1");
+                    return noDoctorFragment;
+                }
 
             case 2:
                 // emergency contacts fragment
@@ -199,20 +282,6 @@ public class MainActivity extends AppCompatActivity
             default:
                 return new HomeFragment();
         }
-    }
-
-    // user's name
-    public static String getname() {
-        String name = "";
-        // patient
-        if (Constant.type == 0 && Constant.patient != null) {
-            name = Constant.patient.getFirst_name() + " " + Constant.patient.getLast_name();
-        }
-        // doctor
-        else if (Constant.type == 1 && Constant.Doctor != null) {
-            name = Constant.Doctor.getFirst_name() + " " + Constant.Doctor.getLast_name();
-        }
-        return name;
     }
 
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 public class HistoryActivity extends AppCompatActivity {
+    TextView name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

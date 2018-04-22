@@ -1,7 +1,6 @@
 package com.HeartmatePack.heartmate;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -49,7 +48,7 @@ public class PatientSignUp2Activity extends AppCompatActivity {
     String p_wieght,p_minrate,p_maxrate;
     String gender;
 
-    ProgressDialog progressDialog;
+
     TextView ageTextView;
     RadioGroup radioGroup;
 
@@ -59,8 +58,6 @@ public class PatientSignUp2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_sign_up2);
         auth = FirebaseAuth.getInstance();
-
-        progressDialog = new ProgressDialog(this);
 
         // get views from activity
         ageTextView = (TextView) findViewById(R.id.text_BirthDate);
@@ -131,7 +128,7 @@ public class PatientSignUp2Activity extends AppCompatActivity {
 
 
                     // waiting panel
-                    progressDialog.setMessage("SignUp...");
+                    Util.showprogress(PatientSignUp2Activity.this, "SignUp...");
 
                     auth.createUserWithEmailAndPassword(PatientSignUp1Activity.p_email, PatientSignUp1Activity.p_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -153,15 +150,16 @@ public class PatientSignUp2Activity extends AppCompatActivity {
                                 Constant.type=0;
                                 initDatabase();
 
+                                // send data to firebase
                                 tasksRef.child(Constant.patient.getPatient_id()).setValue(Constant.patient).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        progressDialog.dismiss();
+                                        Util.dismissprogress();
                                         Toast.makeText(PatientSignUp2Activity.this, "Saved: ", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                                 // completed
-                                progressDialog.dismiss();
+                                Util.dismissprogress();
                                 Toast.makeText(PatientSignUp2Activity.this, " SignUp Success.",
                                         Toast.LENGTH_SHORT).show();
 
@@ -171,7 +169,7 @@ public class PatientSignUp2Activity extends AppCompatActivity {
                                 startActivity(intent);
                             } else {
                                 // display a message if sign in failed
-                                progressDialog.dismiss();
+                                Util.dismissprogress();
                                 Log.w("P. SIgnUp2", "create user failed", task.getException());
                                 Toast.makeText(PatientSignUp2Activity.this, " failed.",
                                         Toast.LENGTH_SHORT).show();
@@ -179,9 +177,9 @@ public class PatientSignUp2Activity extends AppCompatActivity {
                         }
                     });
                 }
-                // if not filled field
+                // if not all filed are filled
                 else {
-                    progressDialog.dismiss();
+                    Util.dismissprogress();
                     Toast.makeText(getApplicationContext(), "Please enter all fields....", Toast.LENGTH_SHORT).show();
                 }
             }

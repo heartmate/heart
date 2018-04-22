@@ -108,4 +108,19 @@ public class Doctor {
     public void setHospital(String hospital) {
         this.hospital = hospital;
     }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("doctor_id", doctor_id);
+        result.put("first_name", first_name);
+        result.put("last_name", last_name);
+        result.put("specialty", specialty);
+        result.put("phone", phone);
+        result.put("hospital", hospital);
+        result.put("email", email);
+        result.put("type", type);
+
+        return result;
+    }
 }

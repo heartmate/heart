@@ -38,17 +38,21 @@ public class EditActivity extends AppCompatActivity {
         btn_update = findViewById(R.id.btn_update);
         input_f_name = findViewById(R.id.input_f_name);
         input_l_name = findViewById(R.id.input_l_name);
+
         input_wight = findViewById(R.id.input_wight);
         input_phone = findViewById(R.id.input_phone);
         input_email = findViewById(R.id.input_email);
         minrate=findViewById(R.id.minrate);
         maxrate=findViewById(R.id.maxrate);
+
         phone = findViewById(R.id.phone);
         input_p_specialty = findViewById(R.id.input_p_specialty);
         input_p_hospital = findViewById(R.id.input_p_hospital);
         heart_rate=findViewById(R.id.heart_rate);
         aidsL=findViewById(R.id.aids);
         input_email.setEnabled(false);
+
+        //  first aid check box
         aid1=findViewById(R.id.aid1);
         aid2=findViewById(R.id.aid2);
         aid3=findViewById(R.id.aid3);
@@ -66,6 +70,8 @@ public class EditActivity extends AppCompatActivity {
             input_email.setText(Constant.patient.getEmail());
             maxrate.setText(Constant.patient.getMax());
             minrate.setText(Constant.patient.getMin());
+
+            // remove hospitable and specialist from patient
             hospital.setVisibility(View.GONE);
             speial.setVisibility(View.GONE);
 
@@ -95,6 +101,7 @@ public class EditActivity extends AppCompatActivity {
             input_p_hospital.setText(Constant.Doctor.getHospital());
             input_p_specialty.setText(Constant.Doctor.getSpecialty());
 
+            // remove wieght, heart rate and first adi from doctor
             wight.setVisibility(View.GONE);
             heart_rate.setVisibility(View.GONE);
             aidsL.setVisibility(View.GONE);
@@ -123,7 +130,7 @@ public class EditActivity extends AppCompatActivity {
                         aids+="*"+getString(R.string.aid5)+"\n";
                     }
 
-                    // get new data from activity
+                    // get new data from views
                     Constant.patient.setFirst_name(input_f_name.getText() + "");
                     Constant.patient.setLast_name(input_l_name.getText() + "");
                     Constant.patient.setPhone(input_phone.getText() + "");
@@ -139,6 +146,7 @@ public class EditActivity extends AppCompatActivity {
                     childUpdates.put(Constant.patient.getPatient_id(), Constant.patient.toMap());
                     tasksRef.updateChildren(childUpdates);
                     finish();
+
 
                     // Doctor
                 } else {

@@ -109,6 +109,7 @@ public class DoctorFragment extends Fragment {
 
                                 // remove doctor from patient in firebase
                                 tasksRef.child(Constant.patient.getPatient_id()).child("doctor").removeValue();
+                                tasksRef.child(Constant.patient.getPatient_id()).child("doctor_ver").setValue("0");
 
                                 // set no doctor fragment
                                 NoDoctorFragment fragment2 = new NoDoctorFragment();

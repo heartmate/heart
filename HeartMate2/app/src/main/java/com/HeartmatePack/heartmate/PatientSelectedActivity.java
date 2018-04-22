@@ -16,26 +16,28 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.HeartmatePack.heartmate.bean.Heart_Rate;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PatientSelectedActivity extends AppCompatActivity {
-    TextView name,heart_rate;
-    LinearLayout patient_chat,patient_history,patient_info;
+    TextView name, heart_rate;
+    LinearLayout patient_chat, patient_history, patient_info;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_selected);
 
         // get views from activity
-        patient_chat=findViewById(R.id.patient_chat);
-        patient_history=findViewById(R.id.patient_history);
-        patient_info=findViewById(R.id.patient_info);
-        name=findViewById(R.id.name);
-        heart_rate=findViewById(R.id.heart_rate);
+        patient_chat = findViewById(R.id.patient_chat);
+        patient_history = findViewById(R.id.patient_history);
+        patient_info = findViewById(R.id.patient_info);
+        name = findViewById(R.id.name);
+        heart_rate = findViewById(R.id.heart_rate);
 
         // set patient name
-        name.setText(Constant.Selected_patient.getFirst_name()+" "+Constant.Selected_patient.getLast_name());
+        name.setText(Constant.Selected_patient.getFirst_name() + " " + Constant.Selected_patient.getLast_name());
 
         // chat button
         patient_chat.setOnClickListener(new View.OnClickListener() {
@@ -45,15 +47,16 @@ public class PatientSelectedActivity extends AppCompatActivity {
 
                 if (Constant.type == 1) {
                     revicever = Constant.Selected_patient.getEmail().toString();
-                    Log.e("P. selected" , "have doctor");
+                    Log.e("P. selected", "have doctor");
                 }
 
-                Log.e("P. selected", "R: "+revicever);
+                Log.e("P. selected", "R: " + revicever);
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
                 emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {revicever});
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{revicever});
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "HeartMate");
                 startActivity(emailIntent);
+
             }
         });
 
@@ -76,6 +79,7 @@ public class PatientSelectedActivity extends AppCompatActivity {
         });
         getRate();
     }
+
     public void getRate() {
 
         // set date format
@@ -98,7 +102,7 @@ public class PatientSelectedActivity extends AppCompatActivity {
                         Heart_Rate heart_rate1 = (Heart_Rate) dataSnapshot.getValue(Heart_Rate.class);
 
                         // set the value in activity
-                        heart_rate.setText(heart_rate1.getRate()+" bpm");
+                        heart_rate.setText(heart_rate1.getRate() + " bpm");
                     }
 
                     @Override

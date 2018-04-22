@@ -50,7 +50,7 @@ public class MyPatientRecyclerViewAdapter extends RecyclerView.Adapter<MyPatient
 
         // set the patient's position
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(position + "-");
+        holder.mIdView.setText((position+1) + "-");
 
         // set the patient's name
         holder.mContentView.setText(mValues.get(position).getFirst_name() + " " + mValues.get(position).getLast_name());
@@ -95,7 +95,8 @@ public class MyPatientRecyclerViewAdapter extends RecyclerView.Adapter<MyPatient
                                 // reject patient and remove doctor from patient in database
                                 Util.acceptOrRejectPatient(false);
                                 mValues.remove(Constant.Selected_patient);
-                                
+                                Constant.Selected_patient.setDoctor_ver("0");
+
                                 notifyDataSetChanged();
                             }
                         })

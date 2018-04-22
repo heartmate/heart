@@ -24,7 +24,6 @@ import com.HeartmatePack.heartmate.bean.Heart_Rate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -42,7 +41,7 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-TextView heart_rate;
+    TextView heart_rate;
     private OnFragmentInteractionListener mListener;
 
     public HomeFragment() {
@@ -84,7 +83,7 @@ TextView heart_rate;
         // get views from activity
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         TextView txtName = (TextView) view.findViewById(R.id.name);
-        heart_rate=view.findViewById(R.id.heart_rate);
+        heart_rate = view.findViewById(R.id.heart_rate);
         Button doctor_chat = view.findViewById(R.id.doctor_chat);
 
         // chat with doctor button
@@ -94,21 +93,23 @@ TextView heart_rate;
 
                 String revicever = "";
 
-                if (Constant.type == 0 && Constant.patient != null) {
-                    if(Constant.patient_doctor != null && !Constant.patient_doctor.equals("")){
-                        revicever = Constant.patient_doctor.getEmail().toString();
-                        Log.e("P. home" , "have doctor");
-                        Log.e("P. home", "R: "+revicever);
-                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                        emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {revicever});
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "HeartMate");
-                        startActivity(emailIntent);
-                    }
-                    else {
-                        Toast.makeText(view.getContext(), "You have no doctor", Toast.LENGTH_SHORT).show();
-                        Log.e("P. home", "you have no doctor");
-                    }
+                try {
+                    revicever = Constant.patient_doctor.getEmail().toString();
+                    Log.e("P. home", "have doctor");
+                    Log.e("P. home", "R: " + revicever);
+                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                    emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{revicever});
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "HeartMate");
+                    startActivity(emailIntent);
+
+                    // if doctor was removed
+                    if (Constant.patient.getDoctor_ver().equals("0"))
+                        throw new NullPointerException();
+
+                } catch (NullPointerException e) {
+                    Toast.makeText(view.getContext(), "You have no doctor", Toast.LENGTH_SHORT).show();
+                    Log.e("P. home", "you have no doctor");
                 }
             }
         });
@@ -171,7 +172,7 @@ TextView heart_rate;
 
                         // get data from database ans set in activity
                         Heart_Rate heart_rate1 = (Heart_Rate) dataSnapshot.getValue(Heart_Rate.class);
-                        heart_rate.setText(heart_rate1.getRate()+" bpm");
+                        heart_rate.setText(heart_rate1.getRate() + " bpm");
                     }
 
                     @Override

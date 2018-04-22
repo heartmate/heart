@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.IBinder;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -101,18 +102,18 @@ public class MyService extends Service {
 
                             // get location for SMS
                             Location location = Util.getLastKnownLocation(getApplicationContext());
-                            String uri="";
-                            if(location != null) {
-                                 uri = "http://maps.google.com/maps?saddr=" + location.getLatitude() + "," + location.getLongitude();
+                            String uri = "";
+                            if (location != null) {
+                                uri = "http://maps.google.com/maps?saddr=" + location.getLatitude() + "," + location.getLongitude();
 
                             }
                             Log.e("Location", uri);
 
 
                             // send the message
-                            if(emg!=null) {
+                            if (emg != null) {
                                 for (int i = 0; i < emg.length; i++) {
-                                    if (emg[i]!=null &&!emg[i].isEmpty()) {
+                                    if (emg[i] != null && !emg[i].isEmpty()) {
                                         SmsManager sms = SmsManager.getDefault();
                                         sms.sendTextMessage(emg[i], null, "I am " + Util.getname() + "\n I need immediate help\n" + uri, null, null);
                                     }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 
 /**
@@ -73,7 +74,7 @@ public class HelpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_help, container, false);
         contactUS = view.findViewById(R.id.btn_helpContact_us);
 
@@ -81,10 +82,9 @@ public class HelpFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String revicever = "Heartmate@gmail.com";
-
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                emailIntent.setData(Uri.parse("mailto:"));//  open email apps
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {revicever});
+                emailIntent.setData(Uri.parse("mailto:")); // open email apps should handle this
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{revicever}); // set reciver email
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "HeartMate HELP"); // subject
                 startActivity(emailIntent);
             }

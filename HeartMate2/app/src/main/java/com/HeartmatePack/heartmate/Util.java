@@ -109,9 +109,10 @@ public class Util {
         }
         // false (reject)
         else {
-            // rmove doctor from patient
+            // remove doctor from patient
             tasksRef.child(Constant.Selected_patient.getPatient_id()).child("doctor").removeValue();
-            tasksRef.child(Constant.Selected_patient.getPatient_id()).child("doctor_ver").removeValue();
+            // doctor_ver = 0 (patient was rajected)
+            tasksRef.child(Constant.Selected_patient.getPatient_id()).child("doctor_ver").setValue("0");
         }
     }
 

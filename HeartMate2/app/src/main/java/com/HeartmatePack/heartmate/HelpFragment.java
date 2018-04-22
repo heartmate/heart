@@ -1,12 +1,16 @@
 package com.HeartmatePack.heartmate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 
 /**
@@ -17,15 +21,20 @@ import android.view.ViewGroup;
  * Use the {@link HelpFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+
 public class HelpFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    // button on help page
+    Button contactUS;
 
     private OnFragmentInteractionListener mListener;
 
@@ -57,6 +66,7 @@ public class HelpFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -64,8 +74,23 @@ public class HelpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_help, container, false);
-        // TODO: need help
+        View view = inflater.inflate(R.layout.fragment_help, container, false);
+        contactUS = view.findViewById(R.id.btn_helpContact_us);
+
+        contactUS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String revicever = "Heartmate@gmail.com";
+
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse("mailto:"));//  open email apps
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {revicever});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "HeartMate HELP"); // subject
+                startActivity(emailIntent);
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -101,4 +126,5 @@ public class HelpFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

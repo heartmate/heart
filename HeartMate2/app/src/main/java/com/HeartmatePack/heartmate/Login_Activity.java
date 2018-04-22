@@ -134,6 +134,12 @@ public class Login_Activity extends AppCompatActivity {
                                             Util.dismissprogress();
                                             Toast.makeText(getApplicationContext(), "welcome  " + Constant.patient.getFirst_name() + " " + Constant.patient.getLast_name(), Toast.LENGTH_SHORT).show();
 
+                                            // emergency contacts and first aid
+                                            Intent intent = new Intent(Login_Activity.this, MyService.class);
+                                            intent.putExtra("AIDS", Constant.patient.getAids());
+                                            intent.putExtra("MAX", Constant.patient.getMax());
+                                            intent.putExtra("MIN", Constant.patient.getMin());
+
                                             String[] emg = new String[3];
                                             int i = 0;
                                             if (Constant.patient.getContact1() != null && !Constant.patient.getContact1().isEmpty()) {
@@ -148,7 +154,8 @@ public class Login_Activity extends AppCompatActivity {
                                                 emg[i] = Constant.patient.getContact3();
                                                 i++;
                                             }
-
+                                            intent.putExtra("EMG", emg);
+                                            startService(intent);
                                             startActivity(new Intent(Login_Activity.this, MainActivity.class));
                                             finish();
                                         } else {
@@ -198,6 +205,8 @@ public class Login_Activity extends AppCompatActivity {
                                             Util.dismissprogress();
 
                                             // go to home page (Main Activity)
+                                            Intent intent = new Intent(Login_Activity.this, MyService.class);
+                                            stopService(intent);
                                             Toast.makeText(getApplicationContext(), "welcome  " + Constant.Doctor.getFirst_name() + " " + Constant.Doctor.getLast_name(), Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(Login_Activity.this, MainActivity.class));
                                             finish();

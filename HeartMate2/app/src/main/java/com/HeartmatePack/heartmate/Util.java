@@ -23,7 +23,7 @@ import java.util.List;
 
 public class Util {
     private static ProgressDialog pd;
-
+    
     // method to return the user's name
     public static String getname() {
         String name = "";
@@ -137,4 +137,4 @@ public class Util {
         return bestLocation;
 
     }
-}
+    }

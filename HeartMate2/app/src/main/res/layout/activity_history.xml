@@ -20,31 +20,30 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="sara"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-            <View
-                android:id="@+id/graph"
-                android:layout_width="match_parent"
-                android:layout_height="200dip"
-                android:layout_below="@id/name"
-                android:background="@color/colorButtons"/>
+                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/rate_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/graph"
+                android:layout_below="@id/name"
                 android:layout_margin="10dp"
                 android:text="22/2/2018"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
+
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/graph"
+                android:layout_width="match_parent"
+                android:layout_height="200dip"
+                android:layout_below="@id/rate_date" />
+
+
 
             <TableLayout
                 android:id="@+id/table"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/rate_date"
+                android:layout_below="@id/graph"
                 android:orientation="vertical"
               >
 

@@ -12,5 +12,5 @@
     <string name="aid5">Call cardiologist for instruction</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello, Can I Help you...</string>
+    <string name="hello_blank_fragment">Hello, How can I help you?</string>
 </resources>

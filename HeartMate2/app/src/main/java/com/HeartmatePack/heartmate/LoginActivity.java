@@ -1,6 +1,8 @@
 package com.HeartmatePack.heartmate;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +22,15 @@ public class LoginActivity extends AppCompatActivity {
         patient_login=(LinearLayout)findViewById(R.id.patient_login);
         doctor_login=(LinearLayout)findViewById(R.id.doctor_login);
 
+
+        // access permission for location and SMS
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,  android.Manifest.permission.ACCESS_FINE_LOCATION},2
+            );
+        }
 
         // if patient set type = 0
         patient_login.setOnClickListener(new View.OnClickListener() {

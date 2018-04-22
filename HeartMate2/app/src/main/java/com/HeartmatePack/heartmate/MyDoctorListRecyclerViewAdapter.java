@@ -1,9 +1,11 @@
 package com.HeartmatePack.heartmate;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,13 +35,13 @@ public class MyDoctorListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoct
     Fragment fragment1;
     Activity activity;
 
-    public MyDoctorListRecyclerViewAdapter(Activity activit, Fragment fragment, FragmentManager fragmentManager1, List<Doctor> items, OnListFragmentInteractionListener listener) {
+    public MyDoctorListRecyclerViewAdapter(Activity activit ,Fragment fragment, FragmentManager fragmentManager1, List<Doctor> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
         //...
-        fragmentManager = fragmentManager1;
-        fragment1 = fragment;
-        activity = activit;
+        fragmentManager=fragmentManager1;
+        fragment1=fragment;
+        activity=activit;
     }
 
     @Override
@@ -52,7 +54,7 @@ public class MyDoctorListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoct
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText((position + 1) + "-");
+        holder.mIdView.setText((position+1) + "-");
 
         holder.select.setTag(holder.mItem);
 
@@ -65,21 +67,32 @@ public class MyDoctorListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoct
             @Override
             public void onClick(final View view) {
 
-                // add doctor for patient
-                Constant.patient_doctor = (Doctor) view.getTag();
-                Constant.patient.setDoctor(Constant.patient_doctor.getDoctor_id());
-                tasksRef.child(Constant.patient.getPatient_id()).child("doctor").setValue(Constant.patient_doctor.getDoctor_id());
+                new AlertDialog.Builder(activity)
+                        .setTitle("Doctor Selection:")
+                        .setMessage("Are you sure ? this Doctor will Selected ")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                // set doctor fragment
-                DoctorFragment fragment2 = new DoctorFragment();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.content, fragment2);
+                            public void onClick(DialogInterface dialog, int whichButton) {
 
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                                // add doctor for patient
+                                Constant.patient_doctor = (Doctor) view.getTag();
+                                Constant.patient.setDoctor(Constant.patient_doctor.getDoctor_id());
+                                tasksRef.child(Constant.patient.getPatient_id()).child("doctor").setValue(Constant.patient_doctor.getDoctor_id());
+
+                                // set doctor fragment
+                                DoctorFragment fragment2 = new DoctorFragment();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.content, fragment2);
+
+                                fragmentTransaction.addToBackStack(null);
+                                fragmentTransaction.commit();
 
 
-                Log.e("Log", "onClick: " + Constant.patient_doctor.getDoctor_id());
+                                Log.e("Log", "onClick: " + Constant.patient_doctor.getDoctor_id());
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
 
             }
         });
@@ -99,6 +112,8 @@ public class MyDoctorListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoct
     public int getItemCount() {
         return mValues.size();
     }
+
+
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {

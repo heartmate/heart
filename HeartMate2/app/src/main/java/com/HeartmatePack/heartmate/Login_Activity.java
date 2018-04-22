@@ -85,7 +85,7 @@ public class Login_Activity extends AppCompatActivity {
         });
 
 
-        // method to go to forget password link
+        // method to go to forget password page
         TextView forgetPasswordLink = (TextView) findViewById(R.id.link_forgetPassword);
         forgetPasswordLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,7 +180,7 @@ public class Login_Activity extends AppCompatActivity {
                                 });
 
                                 if (Constant.patient.getDoctor() != null && !Constant.patient.getDoctor().isEmpty()) {
-                                    getDoctor();
+                                    Util.getDoctor();
                                 }
 
                             }
@@ -240,42 +240,6 @@ public class Login_Activity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-
-    private void getDoctor() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference tasksRef = database.getReference(Constant.DOCTOR_FIREBASE);
-
-        tasksRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Doctor dcotor = (Doctor) dataSnapshot.getValue(Doctor.class);
-                if (dcotor != null && dcotor.getDoctor_id().equals(Constant.patient.getDoctor())) {
-                    Constant.patient_doctor = dcotor ;
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private FirebaseDatabase initDatabase() {

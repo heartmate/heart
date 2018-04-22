@@ -1,12 +1,13 @@
 package com.HeartmatePack.heartmate;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.HeartmatePack.heartmate.bean.Doctor;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -98,23 +95,33 @@ public class DoctorFragment extends Fragment {
         delet_my_doctor_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                initDatabasep();
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Remove Doctor:")
+                        .setMessage("Are you sure ? your Doctor will Removed ")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                // remove doctor from patient
-                Constant.patient.setDoctor("");
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                initDatabasep();
 
-                // remove doctor from patient in firebase
-                tasksRef.child(Constant.patient.getPatient_id()).child("doctor").removeValue();
+                                // remove doctor from patient
+                                Constant.patient.setDoctor("");
 
-                // set no doctor fragment
-                NoDoctorFragment fragment2 = new NoDoctorFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                con.removeAllViews();
-                fragmentTransaction.replace(R.id.con, fragment2);
+                                // remove doctor from patient in firebase
+                                tasksRef.child(Constant.patient.getPatient_id()).child("doctor").removeValue();
 
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                                // set no doctor fragment
+                                NoDoctorFragment fragment2 = new NoDoctorFragment();
+                                FragmentManager fragmentManager = getFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                con.removeAllViews();
+                                fragmentTransaction.replace(R.id.con, fragment2);
+
+                                fragmentTransaction.addToBackStack(null);
+                                fragmentTransaction.commit();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
             }
         });
         return view;
@@ -131,7 +138,7 @@ public class DoctorFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if(Constant.patient.getDoctor()!=null && !Constant.patient.getDoctor().isEmpty()){
-            getDoctor();
+            Util.getDoctor();
         }
     }
 
@@ -156,46 +163,6 @@ public class DoctorFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-
-    private void getDoctor() {
-
-        // set reference on doctor in firebase
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference tasksRef = database.getReference(Constant.DOCTOR_FIREBASE);
-
-        tasksRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.e("Util", "onChildAdded: " + dataSnapshot.getValue());
-
-                // get doctor information from firebase and save locally
-                Doctor doctor = (Doctor) dataSnapshot.getValue(Doctor.class);
-                if (doctor != null && doctor.getDoctor_id().equals(Constant.patient.getDoctor())) {
-                    Constant.patient_doctor = doctor;
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     private void initDatabasep() {
         // set reference on patient in firebase

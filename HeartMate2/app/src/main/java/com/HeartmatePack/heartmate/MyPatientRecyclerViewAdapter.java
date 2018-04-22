@@ -1,7 +1,9 @@
 package com.HeartmatePack.heartmate;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,6 +55,13 @@ public class MyPatientRecyclerViewAdapter extends RecyclerView.Adapter<MyPatient
         // set the patient's name
         holder.mContentView.setText(mValues.get(position).getFirst_name() + " " + mValues.get(position).getLast_name());
 
+        // if doctor is already accepted the patient
+        if (holder.mItem.getDoctor_ver() != null && !holder.mItem.getDoctor_ver().isEmpty() && holder.mItem.getDoctor_ver().equals("1")) {
+            holder.control.setVisibility(View.GONE);
+        } else {
+            holder.control.setVisibility(View.VISIBLE);
+        }
+
         holder.patient_selected.setTag(mValues.get(position));
         holder.reject.setTag(mValues.get(position));
         holder.accept.setTag(mValues.get(position));
@@ -69,7 +78,59 @@ public class MyPatientRecyclerViewAdapter extends RecyclerView.Adapter<MyPatient
             }
         });
 
+        // when reject the patient adding
+        holder.reject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                // show confirmation message
+                new AlertDialog.Builder(activity)
+                        .setTitle("Patient Acceptance:")
+                        .setMessage("Are you sure ? this Patient will Rejected ")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Constant.Selected_patient=(Patient) view.getTag();
+
+                                // reject patient and remove doctor from patient in database
+                                Util.acceptOrRejectPatient(false);
+                                mValues.remove(Constant.Selected_patient);
+                                
+                                notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+
+            }
+        });
+
+        // when accept the patient adding
+        holder.accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+
+                new AlertDialog.Builder(activity)
+                        .setTitle("Patient Acceptance:")
+                        .setMessage("Are you sure ? this Patient will Accepted ")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Constant.Selected_patient=(Patient) view.getTag();
+
+                                // accept patient and add doctor to patient in database
+                                Util.acceptOrRejectPatient(true);
+                                mValues.remove(Constant.Selected_patient);
+                                Constant.Selected_patient.setDoctor_ver("1");
+
+                                // update database
+                                mValues.add(Constant.Selected_patient);
+                                notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
+        });
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
